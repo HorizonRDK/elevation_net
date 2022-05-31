@@ -501,7 +501,7 @@ int ImageUtils::GetNV12PyramidFromNV12Img(
   cv::Mat img_nv12;
   if (in_img_width != scaled_img_width || in_img_height != scaled_img_height) {
     cv::Mat nv12_tmp(in_img_height * 3 / 2, in_img_width, CV_8UC1,
-                     reinterpret_cast<char *>(in_img_data));
+                     const_cast<char *>(in_img_data));
     cv::Mat bgr_mat(in_img_height, in_img_width, CV_8UC3);
     cv::cvtColor(nv12_tmp, bgr_mat, CV_YUV2BGR_NV12);
     // cv::imwrite("img1.jpg", bgr_mat);
@@ -511,7 +511,7 @@ int ImageUtils::GetNV12PyramidFromNV12Img(
     ImageUtils::BGRToNv12(resized_mat, img_nv12);
     data = reinterpret_cast<char *>(img_nv12.data);
   } else {
-    data = reinterpret_cast<char *>(in_img_data);
+    data = const_cast<char *>(in_img_data);
   }
 
   int y_img_len = model_input_width_ * model_input_height_;
