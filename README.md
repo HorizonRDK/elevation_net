@@ -173,9 +173,8 @@ colcon build --packages-select elevation_net \
 | 参数名                 | 类型        | 解释                                        | 是否必须 | 支持的配置           | 默认值                        |
 | ---------------------- | ----------- | ------------------------------------------- | -------- | -------------------- | ----------------------------- |
 | is_sync_mode           | int         | 同步/异步推理模式。0：异步模式；1：同步模式 | 否       | 0/1                  | 0                             |
-| model_file_name        | std::string | 推理使用的模型文件                          | 否       | 根据实际模型路径配置 | config/elevation.hbm           |
-| pointcloud_pub_topic_name  | std::string | 发布pointcloud2点云数据 | 是       | 根据实际部署环境配置 | /elevation_net/points |
-| image_sub_topic_name   | std::string | 订阅nv12格式的sensors_msg::msg::Image图像，用于提取高度和深度信息     | 是       | 根据实际部署环境配置 | /image_raw     |
+| config_file_path       | std::string | 推理使用的配置文件路径                          | 否       | 根据实际配置文件路径配置 | ./config          |
+| shared_mem             | int         | 是否使用shared mem通信方式订阅图片消息。打开和关闭shared mem通信方式订阅图片的topic名分别为/hbmem_img和/image_raw。 | 否      | 0/1                  | 0                            |
 
 ## 运行
 
@@ -194,8 +193,6 @@ cp -r install/lib/elevation_net/config/ .
 
 # 启动图片发布pkg
 ros2 run mipi_cam mipi_cam --ros-args -p out_format:=nv12 -p image_width:=960 -p image_height:=544 -p io_method:=shared_mem --log-level error &
-# 启动jpeg图片编码&发布pkg
-ros2 run hobot_codec hobot_codec_republish --ros-args -p channel:=1 -p in_mode:=shared_mem -p in_format:=nv12 -p out_mode:=ros -p out_format:=jpeg -p sub_topic:=/hbmem_img -p pub_topic:=/image_jpeg --ros-args --log-level error &
 
 # 启动高程网络pkg
 ros2 run elevation_net elevation_net --ros-args -p shared_men:=1 -p config_file_path:=./config --ros-args --log-level info 
@@ -221,17 +218,13 @@ export ROS_LOG_DIR=/userdata/
 export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:./install/lib/
 
 # config中为示例使用的模型，根据实际安装路径进行拷贝
-cp -r install/lib/mono2d_body_detection/config/ .
+cp -r install/lib/elevation_net/config/ .
 
 # 启动图片发布pkg
 ./install/lib/mipi_cam/mipi_cam --ros-args -p out_format:=nv12 -p image_width:=960 -p image_height:=544 -p io_method:=shared_mem --log-level error &
-# 启动jpeg图片编码&发布pkg
-./install/lib/hobot_codec/hobot_codec_republish --ros-args -p channel:=1 -p in_mode:=shared_mem -p in_format:=nv12 -p out_mode:=ros -p out_format:=jpeg -p sub_topic:=/hbmem_img -p pub_topic:=/image_jpeg --ros-args --log-level error &
-# 启动web展示pkg
-./install/lib/websocket/websocket --ros-args -p image_topic:=/image_jpeg -p image_type:=mjpeg -p smart_topic:=/hobot_mono2d_body_detection --log-level error &
 
-# 启动单目rgb人体、人头、人脸、人手框和人体关键点检测pkg
-./install/lib/mono2d_body_detection/mono2d_body_detection
+# 启动高程网络检测pkg
+./install/lib/elevation_net/elevation_net
 
 ```
 

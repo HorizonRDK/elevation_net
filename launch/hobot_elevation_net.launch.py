@@ -18,22 +18,6 @@ def generate_launch_description():
             ],
             arguments=['--ros-args', '--log-level', 'error']
         ),
-        # 启动jpeg图片编码&发布pkg
-        Node(
-            package='hobot_codec',
-            executable='hobot_codec_republish',
-            output='screen',
-            parameters=[
-                {"channel": 1},
-                {"in_mode": "shared_mem"},
-                {"in_format": "nv12"},
-                {"out_mode": "ros"},
-                {"out_format": "jpeg"},
-                {"sub_topic": "/hbmem_img"},
-                {"pub_topic": "/image_jpeg"}
-            ],
-            arguments=['--ros-args', '--log-level', 'error']
-        ),
         # 启动elevation_net pkg
         Node(
             package='elevation_net',
