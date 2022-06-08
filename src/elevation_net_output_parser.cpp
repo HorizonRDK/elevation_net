@@ -70,14 +70,22 @@ int32_t ElevationNetOutputParser::Parse(
     //  distCoeffs:
     //  [0.1194292740855249, -0.7251445245675587, 0.003460052616720042,
     //  -0.0008500186617909979, 0.7460054560423278]
-    std::cout << "fx_inv_: " << desc_.fx_inv_ << std::endl;
-    std::cout << "fy_inv_: " << desc_.fy_inv_ << std::endl;
-    std::cout << "cx_inv_: " << desc_.cx_inv_ << std::endl;
-    std::cout << "cy_inv_: " << desc_.cy_inv_ << std::endl;
-    std::cout << "nx: " << desc_.nx_ << std::endl;
-    std::cout << "ny: " << desc_.ny_ << std::endl;
-    std::cout << "nz: " << desc_.nz_ << std::endl;
-    std::cout << "camera_height: " << desc_.cam_H_ << std::endl;
+    RCLCPP_INFO(rclcpp::get_logger("elevation_net_parser"), "fx_inv_: %f",
+                desc_.fx_inv_);
+    RCLCPP_INFO(rclcpp::get_logger("elevation_net_parser"), "fy_inv_: %f",
+                desc_.fy_inv_);
+    RCLCPP_INFO(rclcpp::get_logger("elevation_net_parser"), "cx_inv_: %f",
+                desc_.cx_inv_);
+    RCLCPP_INFO(rclcpp::get_logger("elevation_net_parser"), "cy_inv_: %f",
+                desc_.cy_inv_);
+    RCLCPP_INFO(rclcpp::get_logger("elevation_net_parser"), "nx_: %f",
+                desc_.nx_);
+    RCLCPP_INFO(rclcpp::get_logger("elevation_net_parser"), "ny_: %f",
+                desc_.ny_);
+    RCLCPP_INFO(rclcpp::get_logger("elevation_net_parser"), "nz_: %f",
+                desc_.nz_);
+    RCLCPP_INFO(rclcpp::get_logger("elevation_net_parser"), "camera_height: %f",
+                desc_.cam_H_);
     print = 0;
   }
 
@@ -92,7 +100,8 @@ int32_t ElevationNetOutputParser::Parse(
   }
 
   if (!output_tensor) {
-    RCLCPP_INFO(rclcpp::get_logger("fcos_example"), "tensor layout error.");
+    RCLCPP_INFO(rclcpp::get_logger("elevation_net_parser"),
+                "tensor layout error.");
     return -1;
   }
 
@@ -103,22 +112,6 @@ int32_t ElevationNetOutputParser::Parse(
                 "postprocess return error, code = %d", ret);
   }
   return ret;
-}
-
-template <typename Dtype>
-static void DumpHeightDepth2CV(Dtype *height, Dtype *depth, int valid_w,
-                               int valid_h) {
-  cv::Mat height_mat(valid_h, valid_w, CV_32F, height);
-  cv::Mat depth_mat(valid_h, valid_w, CV_32F, depth);
-  cv::Mat height_u8mat, depth_u8mat;
-  height_mat.convertTo(height_u8mat, CV_8U);
-  depth_mat.convertTo(depth_u8mat, CV_8U);
-  cv::Mat height_color_mat, depth_color_mat;
-  cv::applyColorMap(height_u8mat, height_color_mat, cv::COLORMAP_JET);
-  cv::applyColorMap(depth_u8mat, depth_color_mat, cv::COLORMAP_JET);
-  static int id = 0;
-  cv::imwrite("height_" + std::to_string(id) + "_.jpg", height_color_mat);
-  cv::imwrite("depth_" + std::to_string(id++) + "_.jpg", depth_color_mat);
 }
 
 inline float32x4_t vshlq_n_f32_u32(uint32_t shift) {
@@ -156,7 +149,7 @@ inline float GetFloatByInt(int32_t value, uint32_t shift) {
   return ret_x;
 }
 
-static void DumpModelPrediction(std::shared_ptr<DNNTensor> &output_tensor) {
+void DumpModelPrediction(std::shared_ptr<DNNTensor> &output_tensor) {
   std::ofstream elevation_result("elevation_result2.txt", std::ios::out);
   int output_width, output_height;
   int h_idx, w_idx, c_idx;
@@ -167,8 +160,7 @@ static void DumpModelPrediction(std::shared_ptr<DNNTensor> &output_tensor) {
   for (int h = 0; h < output_height; ++h) {
     for (int w = 0; w < output_width; ++w) {
       int *value = reinterpret_cast<int *>(data);
-      float result;
-      result = GetFloatByInt(*value, 14);
+      GetFloatByInt(*value, 14);
       elevation_result << *value << std::endl;
       switch (output_tensor->properties.tensorType) {
         case HB_DNN_TENSOR_TYPE_S32:
@@ -176,8 +168,9 @@ static void DumpModelPrediction(std::shared_ptr<DNNTensor> &output_tensor) {
           data += (4 * output_tensor->properties.alignedShape.dimensionSize[3]);
           break;
         default:
-          std::cout << "unimplemented data_type "
-                    << output_tensor->properties.tensorType;
+          RCLCPP_INFO(rclcpp::get_logger("elevation_net_parser"),
+                      "unimplemented data_type: %d",
+                      output_tensor->properties.tensorType);
           break;
       }
     }
@@ -199,7 +192,6 @@ void ElevationNetOutputParser::GenerateFeaturePoints(int width, int height) {
 int32_t ElevationNetOutputParser::PostProcess(
     std::shared_ptr<DNNTensor> &output_tensor,
     std::shared_ptr<ElevationNetResult> &det_result) {
-  auto start = std::chrono::high_resolution_clock::now();
   int h_idx, w_idx, c_idx;
   get_tensor_hwc_index(output_tensor, &h_idx, &w_idx, &c_idx);
   if (points_.empty()) {
@@ -207,8 +199,9 @@ int32_t ElevationNetOutputParser::PostProcess(
         output_tensor->properties.validShape.dimensionSize[w_idx];
     model_output_height_ =
         output_tensor->properties.validShape.dimensionSize[h_idx];
-    // std::cout << "model out width:" << model_output_width_ << ", height:" <<
-    // model_output_height_ << std::endl;
+    RCLCPP_INFO(rclcpp::get_logger("elevation_net_parser"),
+                "model out width: %d, height: %d", model_output_width_,
+                model_output_height_);
     GenerateFeaturePoints(model_output_width_, model_output_height_);
   }
 
@@ -220,15 +213,15 @@ int32_t ElevationNetOutputParser::PostProcess(
   uint8_t shift = output_tensor->properties.shift.shiftData[0];
   auto &aligned_shape = output_tensor->properties.alignedShape;
   uint32_t src_w_stride = aligned_shape.dimensionSize[3];
-  // std::cout << "src_w_stride:" << src_w_stride << std::endl;
 
   int *gamma_fix_ptr = nullptr;
   if (output_tensor->properties.tensorType == HB_DNN_TENSOR_TYPE_S32 ||
       output_tensor->properties.tensorType == HB_DNN_TENSOR_TYPE_U32) {
     gamma_fix_ptr = reinterpret_cast<int *>(output_tensor->sysMem[0].virAddr);
   } else {
-    std::cout << "unimplemented data_type "
-              << output_tensor->properties.tensorType;
+    RCLCPP_INFO(rclcpp::get_logger("elevation_net_parser"),
+                "unimplemented data_type: %d",
+                output_tensor->properties.tensorType);
   }
 #if ELEVATION_NEON
   GetFrameOutPut_NEON(shift, src_w_stride,
@@ -238,15 +231,14 @@ int32_t ElevationNetOutputParser::PostProcess(
   GetFrameOutPut(shift, src_w_stride, det_result->depth_result.values.data(),
                  det_result->height_result.values.data(), gamma_fix_ptr);
 #endif
-  std::cout << "ElevationNet parse output end" << std::endl;
   return 0;
 }
 
-int ElevationNetOutputParser::GetFrameOutPut_NEON(uint32_t shift,
-                                                  uint32_t src_w_stride,
-                                                  void *depth_ptr,
-                                                  void *height_ptr,
-                                                  void *gamma_ptr) {
+void ElevationNetOutputParser::GetFrameOutPut_NEON(uint32_t shift,
+                                                   uint32_t src_w_stride,
+                                                   void *depth_ptr,
+                                                   void *height_ptr,
+                                                   void *gamma_ptr) {
   //  std::ofstream out("elevation_neon.txt", std::ios::out);
   if (model_output_width_ % 4 != 0) {
     return GetFrameOutPut(shift, src_w_stride, depth_ptr, height_ptr,
@@ -259,9 +251,6 @@ int ElevationNetOutputParser::GetFrameOutPut_NEON(uint32_t shift,
   static float32x4_t max_neon = vdupq_n_f32(15.f);
   int align_width = model_output_width_ / 4;
   int gamma[4];
-  // std::cout << "shift: " << shift << std::endl;
-  // std::cout << "align_width：" << align_width << std::endl;
-
   for (int h = 0; h < model_output_height_; ++h) {
     for (int w = 0; w < align_width; ++w) {
       gamma[0] = *gamma_fix_ptr;
@@ -293,7 +282,7 @@ int ElevationNetOutputParser::GetFrameOutPut_NEON(uint32_t shift,
   }
 }
 
-int ElevationNetOutputParser::GetFrameOutPut(uint32_t shift,
+void ElevationNetOutputParser::GetFrameOutPut(uint32_t shift,
                                              uint32_t src_w_stride,
                                              void *depth_ptr, void *height_ptr,
                                              void *gamma_ptr) {

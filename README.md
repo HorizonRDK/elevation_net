@@ -209,6 +209,9 @@ cp -r install/lib/elevation_net/config/ .
 # 启动launch文件
 ros2 launch install/share/elevation_net/launch/hobot_elevation_net.launch.py
 
+# 如果要使用共享内存方式，launch文件启动
+ros2 launch install/share/elevation_net/launch/hobot_elevation_net_sharedmem.launch.py
+
 ```
 
 ### **Linux**

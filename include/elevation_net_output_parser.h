@@ -74,10 +74,10 @@ class ElevationNetOutputParser : public SingleBranchOutputParser {
   std::vector<float> points_;
   int model_output_height_, model_output_width_;
 
-  int GetFrameOutPut_NEON(uint32_t shift, uint32_t src_w_stride,
+  void GetFrameOutPut_NEON(uint32_t shift, uint32_t src_w_stride,
                           void *depth_ptr, void *height_ptr, void *gamma_ptr);
 
-  int GetFrameOutPut(uint32_t shift, uint32_t src_w_stride, void *depth_ptr,
+  void GetFrameOutPut(uint32_t shift, uint32_t src_w_stride, void *depth_ptr,
                      void *height_ptr, void *gamma_ptr);
   void GenerateFeaturePoints(int width, int height);
 };

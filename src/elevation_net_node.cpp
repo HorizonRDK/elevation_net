@@ -199,7 +199,14 @@ int ElevationNetNode::Predict(std::vector<std::shared_ptr<DNNInput>> &inputs,
   return Run(inputs, dnn_output, rois, is_sync_mode_ == 1 ? true : false);
 }
 
-int ElevationNetNode::PredictByImage(const std::string &image) {
+int ElevationNetNode::PredictByImage(const std::string image) {
+  // std::string image = "./config/images/charging_base.png";
+  if (access(image.c_str(), R_OK) == -1) {
+    RCLCPP_ERROR(rclcpp::get_logger("elevation_net_node"),
+                 "Image: %s not exist!", image.c_str());
+    return -1;
+  }
+
   // 1. 将图片处理成模型输入数据类型DNNInput
   // 使用图片生成pym，NV12PyramidInput为DNNInput的子类
   std::vector<std::shared_ptr<hobot::easy_dnn::NV12PyramidInput>> pyramid_list;
@@ -250,30 +257,11 @@ void ElevationNetNode::RosImgProcess(
   RCLCPP_INFO(rclcpp::get_logger("elevation_net_node"), "%s", ss.str().c_str());
 
   auto tp_start = std::chrono::system_clock::now();
-  // {{ test
-#if 0
-  std::string image = "./config/charging_base.png";
-  if (access(image.c_str(), R_OK) == -1) {
-    RCLCPP_ERROR(rclcpp::get_logger("Cent3D_detection"), "Image: %s not exist!",
-                 image.c_str());
-    return;
-  }
-  int image_type_ = 0;
-#endif
-  // }}
 
   // 1. 将图片处理成模型输入数据类型DNNInput
   // 使用图片生成pym，NV12PyramidInput为DNNInput的子类
   std::vector<std::shared_ptr<hobot::easy_dnn::NV12PyramidInput>> pyramid_list;
   int ret = 0;
-#if 0
-  if (static_cast<int>(ImageType::BGR) == image_type_) {
-    // bgr img，支持将图片resize到模型输入size
-    ret =
-        image_utils_->GetNV12Pyramid(image, ImageType::BGR, model_input_height_,
-                                     model_input_width_, pyramid_list);
-  }
-#endif
   if ("rgb8" == img_msg->encoding) {
 #ifdef CV_BRIDGE_PKG_ENABLED
     auto cv_img =

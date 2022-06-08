@@ -65,7 +65,7 @@ class ElevationNetNode : public DnnNode {
   int Predict(std::vector<std::shared_ptr<DNNInput>> &inputs,
               const std::shared_ptr<std::vector<hbDNNRoi>> rois,
               std::shared_ptr<DnnNodeOutput> dnn_output);
-  int PredictByImage(const std::string &image);
+  int PredictByImage(const std::string image);
   void RosImgProcess(const sensor_msgs::msg::Image::ConstSharedPtr img_msg);
 #ifdef SHARED_MEM_ENABLED
   void SharedMemImgProcess(
