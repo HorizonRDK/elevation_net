@@ -4,8 +4,8 @@
   <name>elevation_net</name>
   <version>0.0.0</version>
   <description>TODO: Package description</description>
-  <maintainer email="together_ros@horizon.ai">together_ros</maintainer>
-  <license>TODO: License declaration</license>
+  <maintainer email="xue.liang@horizon.ai">xue.liang</maintainer>
+  <license>Apache License 2.0</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 

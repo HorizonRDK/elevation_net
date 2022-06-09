@@ -1,13 +1,17 @@
-/*
- * @Description: Elevation method predict depth and elevation
- * @Author:  huaiyu.zhang@horizon.ai
- * @Date: 2021-07-01 10:30:32
- * @Author:  huaiyu.zhang@horizon.ai
- * @Date: 2021-07-01 10:30:32
- * @LastEditors  :  huaiyu.zhang@horizon.ai
- * @LastEditTime : 2021-07-01 10:30:32
- * @Copyright 2017~2021 Horizon Robotics, Inc.
- */
+// Copyright (c) 2022，Horizon Robotics.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 #include "include/image_utils.h"
 
 #include <features.h>
