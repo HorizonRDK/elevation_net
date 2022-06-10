@@ -81,7 +81,11 @@ add_executable(${PROJECT_NAME}
   src/elevation_net_node.cpp
   src/image_utils.cpp
   src/elevation_net_output_parser.cpp
-  #src/image_publisher.cpp
+)
+
+add_executable(image_publisher
+        src/image_publisher.cpp
+        src/image_utils.cpp
 )
 
 ament_target_dependencies(
@@ -110,9 +114,23 @@ ament_target_dependencies(
 )
 endif()
 
+ament_target_dependencies(
+  image_publisher
+  rclcpp
+  dnn_node
+  sensor_msgs
+  ai_msgs
+)
+
+
 # Install executables
 install(
   TARGETS ${PROJECT_NAME}
+  RUNTIME DESTINATION lib/${PROJECT_NAME}
+)
+
+install(
+  TARGETS image_publisher
   RUNTIME DESTINATION lib/${PROJECT_NAME}
 )
 

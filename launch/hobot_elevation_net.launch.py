@@ -27,6 +27,7 @@ def generate_launch_description():
                 {"out_format": "nv12"},
                 {"image_width": 960},
                 {"image_height": 544},
+                {"io_method": "shared_mem"},
                 {"video_device": "F37"}
             ],
             arguments=['--ros-args', '--log-level', 'error']

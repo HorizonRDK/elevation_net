@@ -116,7 +116,7 @@ ai_msgs为自定义的消息格式，用于算法模型推理后，发布推理�
 
 2、BUILD_HBMEM
 
-- shared mem（共享内存传输）使能开关，默认关闭（OFF），只有在docker中使用tros编译时才会打开（aarch64_toolchainfile.cmake中设置）。
+- shared mem（共享内存传输）使能开关，默认打开（ON）
 - 如果打开，编译和运行会依赖hbm_img_msgs pkg，并且需要使用tros进行编译。
 - 如果关闭，编译和运行不依赖hbm_img_msgs pkg，支持使用原生ros和tros进行编译。
 - 对于shared mem通信方式，当前只支持订阅nv12格式图片。
@@ -195,7 +195,7 @@ cp -r install/lib/elevation_net/config/ .
 ros2 run mipi_cam mipi_cam --ros-args -p out_format:=nv12 -p image_width:=960 -p image_height:=544 -p io_method:=shared_mem --log-level error &
 
 # 启动高程网络pkg
-ros2 run elevation_net elevation_net --ros-args -p shared_men:=1 -p config_file_path:=./config --ros-args --log-level info 
+ros2 run elevation_net elevation_net --ros-args -p shared_mem:=1 -p config_file_path:=./config --ros-args --log-level info 
 
 ```
 运行方式2，使用launch文件启动：
@@ -206,11 +206,11 @@ source ./install/setup.bash
 # 如果是板端编译（无--merge-install编译选项），拷贝命令为cp -r install/PKG_NAME/lib/PKG_NAME/config/ .，其中PKG_NAME为具体的package名。
 cp -r install/lib/elevation_net/config/ .
 
-# 启动launch文件
+# 使用共享内存方式（默认），启动launch文件
 ros2 launch install/share/elevation_net/launch/hobot_elevation_net.launch.py
 
-# 如果要使用共享内存方式，launch文件启动
-ros2 launch install/share/elevation_net/launch/hobot_elevation_net_sharedmem.launch.py
+# 如果不使用共享内存方式，launch文件启动
+ros2 launch install/share/elevation_net/launch/hobot_elevation_net_not_sharedmem.launch.py
 
 ```
 

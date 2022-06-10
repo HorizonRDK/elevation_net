@@ -81,8 +81,8 @@ class ElevationNetNode : public DnnNode {
  private:
   // 输入参数
   std::string config_file_path_ = "./config";
-  int is_sync_mode_ = 1;
-  int shared_mem_ = 0;
+  int is_sync_mode_ = 0;
+  int shared_mem_ = 1;
 
   std::string model_file_name_ = "config/elevation.hbm";
   std::string model_name_ = "elevation";
