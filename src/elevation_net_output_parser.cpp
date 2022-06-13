@@ -275,23 +275,20 @@ void ElevationNetOutputParser::GetFrameOutPut_NEON(uint32_t shift,
       float32x4_t height_neon = vmulq_f32(gamma_neon, depth_neon);
       vst1q_f32(static_cast<float *>(depth_ptr) + 4 * w, depth_neon);
       vst1q_f32(static_cast<float *>(height_ptr) + 4 * w, height_neon);
-#if 0
-           for (int i = 0; i < 4; i++) {
-            std::cout << "depth: " <<
-             *(reinterpret_cast<float *>(depth_ptr) + i + 4 * w) << std::endl;
-             std::cout << "height: "
-             << *(reinterpret_cast<float *>(height_ptr) + i + 4 * w) <<
-             std::endl;
-           }
-#endif
+      for (int i = 0; i < 4; i++) {
+        RCLCPP_INFO(rclcpp::get_logger("elevation_net_parser"), "depth: %f",
+                    *(reinterpret_cast<float *>(depth_ptr) + i + 4 * w));
+        RCLCPP_INFO(rclcpp::get_logger("elevation_net_parser"), "height: %f",
+                    *(reinterpret_cast<float *>(height_ptr) + i + 4 * w));
+      }
     }
   }
 }
 
 void ElevationNetOutputParser::GetFrameOutPut(uint32_t shift,
-                                             uint32_t src_w_stride,
-                                             void *depth_ptr, void *height_ptr,
-                                             void *gamma_ptr) {
+                                              uint32_t src_w_stride,
+                                              void *depth_ptr, void *height_ptr,
+                                              void *gamma_ptr) {
   // std::ofstream out("elevation_cpu.txt", std::ios::out);
   int *gamma_fix_ptr = static_cast<int *>(gamma_ptr);
   float *points_ptr = points_.data();

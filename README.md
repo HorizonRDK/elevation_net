@@ -237,73 +237,49 @@ cp -r install/lib/elevation_net/config/ .
 ## 结果展示
 
 ```
-[16:48:10:123]root@ubuntu:/userdata# ros2 run elevation_net elevation_net --ros-args -p shared_men:=1 -p config_file_path:=./config --ros-args --log-level info 
-[16:48:16:539][WARN] [1653986896.992123541] [example]: This is dnn node example!
-[16:48:16:788][WARN] [1653986897.229717401] [elevation_dection]: Parameter:
-[16:48:16:788]config_file_path_:./config
-[16:48:16:788]shared_men:0
-[16:48:16:789] is_sync_mode_: 1
-[16:48:16:789] model_file_name_: ./config/elevation.hbm
-[16:48:16:824][INFO] [1653986897.230397724] [dnn]: Node init.
-[16:48:16:825][INFO] [1653986897.230647470] [elevation_dection]: Set node para.
-[16:48:16:825][INFO] [1653986897.230904133] [dnn]: Model init.
-[16:48:16:825][BPU_PLAT]BPU Platform Version(1.3.1)!
-[16:48:16:825][HBRT] set log level as 0. version = 3.13.27
-[16:48:16:826][DNN] Runtime version = 1.8.4_(3.13.27 HBRT)
-[16:48:16:941][000:000] (model.cpp:244): Empty desc, model name: elevation, input branch:0, input name:inputquanti-_output
-[16:48:16:974][000:000] (model.cpp:244): Empty desc, model name: elevation, input branch:1, input name:inputquanti2-_output
-[16:48:16:974][000:001] (model.cpp:313): Empty desc, model name: elevation, output branch:0, output name:output_block1quanticonvolution0_conv_output
-[16:48:16:975][INFO] [1653986897.395739633] [dnn]: The model input 0 width is 960 and height is 512
-[16:48:16:975][INFO] [1653986897.396065545] [dnn]: The model input 1 width is 960 and height is 512
-[16:48:16:975][INFO] [1653986897.396335707] [dnn]: Task init.
-[16:48:16:976][INFO] [1653986897.399969317] [dnn]: Set task_num [2]
-[16:48:16:976][INFO] [1653986897.400288978] [elevation_dection]: The model input width is 960 and height is 512
-[16:48:17:083][WARN] [1653986897.537355789] [elevation_dection]: Create subscription with topic_name: /image_raw
-[16:48:17:233][INFO] [1653986897.686988444] [msg pub]: msg_pub_topic_name: elevation_net
-[16:48:17:248][WARN] [1653986897.687478270] [elevation_dection]: start success!!!
-[16:48:17:296][INFO] [1653986897.744999535] [elevation_net_node]: Recved img encoding: nv12, h: 540, w: 960, step: 960, frame_id: default_cam, stamp: 1653986897.547066678, data size: 777600
-[16:48:18:183][INFO] [1653986898.636813142] [elevation_net_node]: Dnn node begin to predict
-[16:48:18:315]fx_inv_: 0.000604548
-[16:48:18:315]fy_inv_: 0.000604445
-[16:48:18:315]cx_inv_: -0.604389
-[16:48:18:315]cy_inv_: -0.318132
-[16:48:18:315]nx: 0
-[16:48:18:315]ny: 0
-[16:48:18:315]nz: 1
-[16:48:18:315]camera_height: 1
-[16:48:18:333]model out width:480, height:256
-[16:48:18:421]src_w_stride:8
-[16:48:18:421]depth: 998
-[16:48:18:421]height: -42.6999
-[16:48:18:421]depth: 998
-[16:48:18:421]height: -25.3397
-[16:48:18:421]depth: 998
-[16:48:18:421]height: -22.1114
-[16:48:18:421]depth: 998
-[16:48:18:421]height: -25.3397
-[16:48:18:421]depth: 998
-[16:48:18:421]height: -21.9895
-[16:48:18:421]depth: 998
-[16:48:18:421]height: -48.3039
-[16:48:18:421]depth: 998
-[16:48:18:421]height: -32.5275
-[16:48:18:421]depth: 998
-[16:48:18:421]height: -32.7102
-[16:48:18:421]depth: 998
-[16:48:18:421]height: -33.0148
-[16:48:18:421]depth: 998
-[16:48:18:422]height: -35.4513
-[16:48:18:422]depth: 998
-[16:48:18:422]height: -38.1924
-[16:48:18:422]depth: 998
-[16:48:18:422]height: -34.233
-[16:48:18:422]depth: 998
-[16:48:18:422]height: -34.233
-[16:48:18:422]depth: 998
-[16:48:18:422]height: -33.0148
-[16:48:18:422]depth: 998
-[16:48:18:423]height: -34.3549
-[16:48:18:423]depth: 998
-[16:48:18:423]height: -35.0249
+[14:20:31:324]root@ubuntu:/userdata# ros2 run elevation_net elevation_net --ros-args -p shared_mem:=1 -p config_file_path:=./config --ros-args --log-level info 
+[14:20:32:759][WARN] [1655101233.247444449] [example]: This is dnn node example!
+[14:20:32:818][WARN] [1655101233.305798644] [elevation_dection]: Parameter:
+[14:20:32:818]config_file_path_:./config
+[14:20:32:818]shared_men:1
+[14:20:32:818] is_sync_mode_: 1
+[14:20:32:818] model_file_name_: ./config/elevation.hbm
+[14:20:32:818][INFO] [1655101233.305956561] [dnn]: Node init.
+[14:20:32:818][INFO] [1655101233.306010812] [elevation_dection]: Set node para.
+[14:20:32:818][INFO] [1655101233.306070812] [dnn]: Model init.
+[14:20:32:822][BPU_PLAT]BPU Platform Version(1.3.1)!
+[14:20:32:827][HBRT] set log level as 0. version = 3.13.27
+[14:20:32:838][DNN] Runtime version = 1.8.4_(3.13.27 HBRT)
+[14:20:32:879][000:000] (model.cpp:244): Empty desc, model name: elevation, input branch:0, input name:inputquanti-_output
+[14:20:32:879][000:001] (model.cpp:244): Empty desc, model name: elevation, input branch:1, input name:inputquanti2-_output
+[14:20:32:879][000:001] (model.cpp:313): Empty desc, model name: elevation, output branch:0, output name:output_block1quanticonvolution0_conv_output
+[14:20:32:880][INFO] [1655101233.365944970] [dnn]: The model input 0 width is 960 and height is 512
+[14:20:32:880][INFO] [1655101233.366060596] [dnn]: The model input 1 width is 960 and height is 512
+[14:20:32:880][INFO] [1655101233.366139846] [dnn]: Task init.
+[14:20:32:881][INFO] [1655101233.368309978] [dnn]: Set task_num [2]
+[14:20:32:881][INFO] [1655101233.368447937] [elevation_dection]: The model input width is 960 and height is 512
+[14:20:33:129][INFO] [1655101233.616972935] [elevation_net_parser]: fx_inv_: 0.000605
+[14:20:33:129][INFO] [1655101233.617527520] [elevation_net_parser]: fy_inv_: 0.000604
+[14:20:33:129][INFO] [1655101233.617651229] [elevation_net_parser]: cx_inv_: -0.604389
+[14:20:33:129][INFO] [1655101233.617761562] [elevation_net_parser]: cy_inv_: -0.318132
+[14:20:33:129][INFO] [1655101233.617862854] [elevation_net_parser]: nx_: 0.000000
+[14:20:33:129][INFO] [1655101233.617968730] [elevation_net_parser]: ny_: 0.000000
+[14:20:33:129][INFO] [1655101233.618075313] [elevation_net_parser]: nz_: 1.000000
+[14:20:33:130][INFO] [1655101233.618179980] [elevation_net_parser]: camera_height: 1.000000
+[14:20:33:131][INFO] [1655101233.619001691] [elevation_net_parser]: model out width: 480, height: 256
+[14:20:33:177][INFO] [1655101233.646398908] [elevation_net_parser]: depth: 998.000000
+[14:20:33:177][INFO] [1655101233.646586659] [elevation_net_parser]: height: -42.699909
+[14:20:33:177][INFO] [1655101233.646637076] [elevation_net_parser]: depth: 998.000000
+[14:20:33:177][INFO] [1655101233.646683992] [elevation_net_parser]: height: -25.339746
+[14:20:33:180][INFO] [1655101233.646766826] [elevation_net_parser]: depth: 998.000000
+[14:20:33:180][INFO] [1655101233.646814659] [elevation_net_parser]: height: -22.111366
+[14:20:33:180][INFO] [1655101233.646860951] [elevation_net_parser]: depth: 998.000000
+[14:20:33:180][INFO] [1655101233.646906743] [elevation_net_parser]: height: -25.339746
+[14:20:33:180][INFO] [1655101233.646953410] [elevation_net_parser]: depth: 998.000000
+[14:20:33:180][INFO] [1655101233.646999410] [elevation_net_parser]: height: -21.989540
+[14:20:33:180][INFO] [1655101233.647045327] [elevation_net_parser]: depth: 998.000000
+[14:20:33:180][INFO] [1655101233.647091285] [elevation_net_parser]: height: -48.303890
+[14:20:33:180][INFO] [1655101233.647138202] [elevation_net_parser]: depth: 998.000000
+[14:20:33:180][INFO] [1655101233.647189952] [elevation_net_parser]: height: -32.527466
 
 # 常见问题
