@@ -38,17 +38,19 @@ ElevationNetNode::ElevationNetNode(const std::string &node_name,
   this->declare_parameter<int>("is_sync_mode", is_sync_mode_);
   this->declare_parameter<std::string>("config_file_path", config_file_path_);
   this->declare_parameter<int>("shared_men", shared_mem_);
+  this->declare_parameter<std::string>("feed_image", feed_image_);
 
   this->get_parameter<int>("is_sync_mode", is_sync_mode_);
   this->get_parameter<std::string>("config_file_path", config_file_path_);
   this->get_parameter<int>("shared_mem", shared_mem_);
+  this->get_parameter<std::string>("feed_image", feed_image_);
   model_file_name_ = config_file_path_ + "/elevation.hbm";
 
   std::stringstream ss;
   ss << "Parameter:"
      << "\nconfig_file_path_:" << config_file_path_
-     << "\nshared_men:" << shared_mem_ << "\n is_sync_mode_: " << is_sync_mode_
-     << "\n model_file_name_: " << model_file_name_;
+     << "\n model_file_name_: " << model_file_name_
+     << "\nfeed_image:" << feed_image_;
   RCLCPP_WARN(rclcpp::get_logger("elevation_dection"), "%s", ss.str().c_str());
   if (Start() == 0) {
     RCLCPP_WARN(rclcpp::get_logger("elevation_dection"), "start success!!!");
@@ -78,6 +80,12 @@ int ElevationNetNode::Start() {
 
   image_utils_ = std::make_shared<ImageUtils>();
   image_utils_->Init();
+  if (!feed_image_.empty()) {
+    RCLCPP_INFO(rclcpp::get_logger("elevation_dection"),
+                 "read image: %s to detect", feed_image_.c_str());
+    PredictByImage(feed_image_);
+    return 0;
+  }
   if (shared_mem_) {
 #ifdef SHARED_MEM_ENABLED
     RCLCPP_WARN(rclcpp::get_logger("elevation_dection"),
@@ -423,13 +431,13 @@ int ElevationNetNode::PubPointcCloud(ElevationNetResult *det_result,
     this->get_parameter_or("pointcloud_pub_topic_name",
                            pointcloud_pub_topic_name_,
                            pointcloud_pub_topic_name_);
-    cloud_pub_ = this->create_publisher<
-            sensor_msgs::msg::PointCloud2>(pointcloud_pub_topic_name_, 5);
+    cloud_pub_ = this->create_publisher<sensor_msgs::msg::PointCloud2>(
+        pointcloud_pub_topic_name_, 5);
   }
   cv::Mat depth = cv::Mat(model_out_height_, model_out_width_, CV_32FC1,
-     det_result->depth_result.values.data());
+                          det_result->depth_result.values.data());
   cv::Mat height = cv::Mat(model_out_height_, model_out_width_, CV_32FC1,
-     det_result->height_result.values.data());
+                           det_result->height_result.values.data());
 
   sensor_msgs::msg::PointCloud2 cloud;
   cloud.header.frame_id = "camera";
