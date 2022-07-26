@@ -51,10 +51,10 @@ class ElevationNetResult : public DNNResult {
   FloatArray height_result;
 };
 
-class ElevationNetOutputParser : public SingleBranchOutputParser {
+class ElevationNetOutputParser : public SingleBranchOutputParser<ElevationNetResult> {
  public:
   int32_t Parse(
-      std::shared_ptr<DNNResult> &output,
+      std::shared_ptr<ElevationNetResult> &output,
       std::vector<std::shared_ptr<InputDescription>> &input_descriptions,
       std::shared_ptr<OutputDescription> &output_description,
       std::shared_ptr<DNNTensor> &output_tensor);
