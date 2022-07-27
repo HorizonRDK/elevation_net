@@ -58,11 +58,7 @@ is_dense: True // 没有非法数据点
 
 ## 依赖库
 
-- dnn:1.8.4
-- easydnn:0.3.3
 - opencv:3.4.5
-- hobotlog:1.0.5
-- rapidjson:1.1.0
 
 ros package：
 

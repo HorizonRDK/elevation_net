@@ -58,7 +58,7 @@ int get_tensor_hwc_index(std::shared_ptr<DNNTensor> tensor, int *h_index,
 }
 
 int32_t ElevationNetOutputParser::Parse(
-    std::shared_ptr<DNNResult> &output,
+    std::shared_ptr<ElevationNetResult> &output,
     std::vector<std::shared_ptr<InputDescription>> &input_descriptions,
     std::shared_ptr<OutputDescription> &output_description,
     std::shared_ptr<DNNTensor> &output_tensor) {
