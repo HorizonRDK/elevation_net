@@ -111,7 +111,7 @@ ai_msgs为自定义的消息格式，用于算法模型推理后，发布推理�
 
 2、BUILD_HBMEM
 
-- shared mem（共享内存传输）使能开关，默认打开（ON）
+- shared mem（共享内存传输）使能开关，默认打开（ON）。编译时可以通过--cmake-args -DBUILD_HBMEM=OFF关闭。
 - 如果打开，编译和运行会依赖hbm_img_msgs pkg，并且需要使用tros进行编译。
 - 如果关闭，编译和运行不依赖hbm_img_msgs pkg，支持使用原生ros和tros进行编译。
 - 对于shared mem通信方式，当前只支持订阅nv12格式图片。

@@ -49,7 +49,7 @@ else()
   message("not using cv_bridge pkg")
 endif ()
 
-# BUILD_HBMEM is set in aarch64_toolchainfile.cmake
+option(BUILD_HBMEM "using shared mem" ON)
 if (${BUILD_HBMEM})
   message("using shared mem")
   find_package(hbm_img_msgs REQUIRED)
