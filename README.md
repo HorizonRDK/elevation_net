@@ -103,18 +103,19 @@ ai_msgs为自定义的消息格式，用于算法模型推理后，发布推理�
 
 #### 编译选项
 
-1、CV_BRIDGE_PKG
+1. CV_BRIDGE_PKG
 
 - cv_bridge pkg依赖的使能开关，默认关闭（OFF），编译时使用-DCV_BRIDGE_PKG=ON命令打开。
 - 如果打开，编译和运行会依赖cv_bridge pkg，支持使用订阅到的rgb8和nv12格式图片进行模型推理。
 - 如果关闭，编译和运行不依赖cv_bridge pkg，只支持使用订阅到的nv12格式图片进行模型推理。
 
-2、BUILD_HBMEM
+2. BUILD_HBMEM
 
-- shared mem（共享内存传输）使能开关，默认打开（ON）。编译时可以通过--cmake-args -DBUILD_HBMEM=OFF关闭。
-- 如果打开，编译和运行会依赖hbm_img_msgs pkg，并且需要使用tros进行编译。
+- 零拷贝传输方式使能开关。Docker交叉编译时默认打开(ON), 编译时可以通过-DBUILD_HBMEM=OFF关闭。
+- 在板端编译时，零拷贝传输方式使能开关默认是关闭的。如果需要依赖零拷贝，可以通过-DBUILD_HBMEM=ON打开。
+- 如果打开，编译会依赖hbm_img_msgs package，并且需要使用tros进行编译。
 - 如果关闭，编译和运行不依赖hbm_img_msgs pkg，支持使用原生ros和tros进行编译。
-- 对于shared mem通信方式，当前只支持订阅nv12格式图片。
+- 对于零拷贝通信方式，当前只支持订阅nv12格式图片。
 
 ### Ubuntu板端编译
 
@@ -128,7 +129,7 @@ ai_msgs为自定义的消息格式，用于算法模型推理后，发布推理�
 
 2、编译
 
-- 编译命令：`colcon build --packages-select elevation_net`
+- 编译命令：`colcon build --packages-select elevation_net --cmake-args -DBUILD_HBMEM=ON`
 - 编译和运行会依赖cv_bridge pkg，不使用shared mem通信方式。支持使用订阅到的rgb8和nv12格式图片进行模型推理。但此package默认采用读取本地图片进行推理的方式。
 
 
