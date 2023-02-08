@@ -18,6 +18,7 @@
 #include "include/image_utils.h"
 #include "rclcpp/rclcpp.hpp"
 
+#ifndef PLATFORM_X86
 #define ENABLE_NEON 1
 #if defined(__ARM_NEON__) || (defined(__ARM_NEON) && defined(__aarch64__))
 #define ARM_NEON_BACK_UP 1
@@ -27,6 +28,9 @@
 #if ARM_NEON_BACK_UP && ENABLE_NEON
 #include <arm_neon.h>
 #define ELEVATION_NEON 1
+#else
+#define ELEVATION_NEON 0
+#endif
 #else
 #define ELEVATION_NEON 0
 #endif
@@ -120,6 +124,7 @@ int32_t ElevationNetOutputParser::Parse(
   return ret;
 }
 
+#ifndef PLATFORM_X86
 inline float32x4_t vshlq_n_f32_u32(uint32_t shift) {
   return vcvtq_f32_u32(vshlq_n_u32(vdupq_n_u32(1), shift));
 }
@@ -145,6 +150,7 @@ inline float32x4_t vcvtq_fixed_f32_s32(const int32_t *value,
   float32x4_t reciprocal = vrecpeq_f32_high(shift_f);
   return vmulq_f32(vcvtq_f32_s32(vld1q_s32(value)), reciprocal);
 }
+#endif
 
 inline float GetFloatByInt(int32_t value, uint32_t shift) {
   float ret_x = value;
@@ -239,7 +245,7 @@ int32_t ElevationNetOutputParser::PostProcess(
 #endif
   return 0;
 }
-
+#ifndef PLATFORM_X86
 void ElevationNetOutputParser::GetFrameOutPut_NEON(uint32_t shift,
                                                    uint32_t src_w_stride,
                                                    void *depth_ptr,
@@ -284,7 +290,7 @@ void ElevationNetOutputParser::GetFrameOutPut_NEON(uint32_t shift,
     }
   }
 }
-
+#endif
 void ElevationNetOutputParser::GetFrameOutPut(uint32_t shift,
                                               uint32_t src_w_stride,
                                               void *depth_ptr, void *height_ptr,
