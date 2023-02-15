@@ -94,7 +94,7 @@ ai_msgs为自定义的消息格式，用于算法模型推理后，发布推理�
 
 - 编程语言: C/C++
 - 开发平台: X3/X86
-- 系统版本：Ubuntu 20.0.4
+- 系统版本：Ubuntu 20.04
 - 编译工具链:Linux GCC 9.3.0/Linaro GCC 9.3.0
 
 ## 编译
@@ -117,7 +117,7 @@ ai_msgs为自定义的消息格式，用于算法模型推理后，发布推理�
 - 如果关闭，编译和运行不依赖hbm_img_msgs pkg，支持使用原生ros和tros进行编译。
 - 对于零拷贝通信方式，当前只支持订阅nv12格式图片。
 
-### Ubuntu板端编译
+### Ubuntu板端编译X3版本
 
 1、编译环境确认
 
@@ -133,7 +133,7 @@ ai_msgs为自定义的消息格式，用于算法模型推理后，发布推理�
 - 编译和运行会依赖cv_bridge pkg，不使用shared mem通信方式。支持使用订阅到的rgb8和nv12格式图片进行模型推理。但此package默认采用读取本地图片进行推理的方式。
 
 
-### Docker交叉编译
+### Docker交叉编译X3版本
 
 1. 编译环境确认
 
@@ -141,20 +141,39 @@ ai_msgs为自定义的消息格式，用于算法模型推理后，发布推理�
 
 2. 编译
 
+  - 编译命令：
+
+  ```
+  export TARGET_ARCH=aarch64
+  export TARGET_TRIPLE=aarch64-linux-gnu
+  export CROSS_COMPILE=/usr/bin/$TARGET_TRIPLE-
+
+  colcon build --packages-select elevation_net \
+    --merge-install \
+    --cmake-force-configure \
+    --cmake-args \
+    --no-warn-unused-cli \
+    -DCMAKE_TOOLCHAIN_FILE=`pwd`/robot_dev_config/aarch64_toolchainfile.cmake
+  ```
+
+### X86 Ubuntu系统上编译X86版本
+
+1. 编译环境确认
+
+   - x86 ubuntu版本: ubuntu20.04
+
+2. 编译
+
    - 编译命令：
 
-```
-export TARGET_ARCH=aarch64
-export TARGET_TRIPLE=aarch64-linux-gnu
-export CROSS_COMPILE=/usr/bin/$TARGET_TRIPLE-
-
-colcon build --packages-select elevation_net \
-   --merge-install \
-   --cmake-force-configure \
-   --cmake-args \
-   --no-warn-unused-cli \
-   -DCMAKE_TOOLCHAIN_FILE=`pwd`/robot_dev_config/aarch64_toolchainfile.cmake
-```
+   ```
+   colcon build --packages-select elevation_net  \
+      --merge-install \
+      --cmake-args \
+      -DPLATFORM_X86=ON \
+      -DBUILD_HBMEM=ON \
+      -DTHIRD_PARTY=`pwd`/../sysroot_docker \
+   ```
 
 ## 注意事项
 
@@ -175,7 +194,7 @@ colcon build --packages-select elevation_net \
 
 编译成功后，将生成的install路径拷贝到地平线X3开发板上（如果是在X3上编译，忽略拷贝步骤），并执行如下命令运行：
 
-### **Ubuntu**
+### **X3 Ubuntu**
 
 运行方式1，使用ros2 run启动：
 
@@ -203,7 +222,7 @@ ros2 launch install/share/elevation_net/launch/hobot_elevation_net.launch.py
 
 ```
 
-### **Linux**
+### **X3 Linux**
 
 ```
 export ROS_LOG_DIR=/userdata/
@@ -217,6 +236,22 @@ cp -r install/lib/elevation_net/config/ .
 
 ```
 
+### **X86 Ubuntu**
+
+```
+export COLCON_CURRENT_PREFIX=./install
+source ./install/setup.bash
+
+# config中为示例使用的模型，根据实际安装路径进行拷贝
+cp -r install/lib/elevation_net/config/ .
+
+#设置运行环境变量
+export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:`pwd`/../sysroot_docker/usr/lib
+
+# 启动高程网络检测pkg
+./install/lib/elevation_net/elevation_net
+
+```
 
 # 结果分析
 
