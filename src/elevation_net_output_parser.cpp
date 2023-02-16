@@ -318,8 +318,10 @@ void ElevationNetOutputParser::GetFrameOutPut(uint32_t shift,
       if (*depth > 2) *depth = 2;
       if (*height > 2) *height = 2;
       //        out << "gamma: " << gamma << std::endl;
-      std::cout << "depth: " << *depth << std::endl;
-      std::cout << "height: " << *height << std::endl;
+      RCLCPP_INFO(rclcpp::get_logger("elevation_net_parser"), "depth: %f",
+                    *depth);
+      RCLCPP_INFO(rclcpp::get_logger("elevation_net_parser"), "height: %f",
+                    *height);
     }
   }
 }
