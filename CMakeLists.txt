@@ -62,7 +62,22 @@ include_directories(include
   ${PROJECT_SOURCE_DIR}
 )
 
-set(SYS_ROOT ${CMAKE_SYSROOT})
+if(PLATFORM_X3)
+  message("build platform X3")
+  set(SYS_ROOT ${CMAKE_SYSROOT})
+elseif(PLATFORM_J5)
+  message("build platform J5")
+elseif(PLATFORM_X86)
+  message("build platform X86")
+  message("THIRD_PARTY is " ${THIRD_PARTY})
+  add_definitions(-DPLATFORM_X86)
+  set(SYS_ROOT ${THIRD_PARTY})
+  link_directories(${THIRD_PARTY}/usr/lib)
+else()
+  message("invalid platform, build platform X3 default")
+  set(SYS_ROOT ${CMAKE_SYSROOT})
+endif()
+
 message("SYS_ROOT is " ${SYS_ROOT})
 include_directories(
   ${SYS_ROOT}/usr/include/
@@ -97,9 +112,6 @@ ament_target_dependencies(
 )
 
 if (${BUILD_HBMEM})
-  target_link_libraries(${PROJECT_NAME}
-    hbmem
-  )
   ament_target_dependencies(
     ${PROJECT_NAME}
     hbm_img_msgs
