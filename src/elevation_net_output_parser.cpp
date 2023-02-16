@@ -318,8 +318,8 @@ void ElevationNetOutputParser::GetFrameOutPut(uint32_t shift,
       if (*depth > 2) *depth = 2;
       if (*height > 2) *height = 2;
       //        out << "gamma: " << gamma << std::endl;
-      //        out << "depth: " << *depth << std::endl;
-      //        out << "height: " << *height << std::endl;
+      std::cout << "depth: " << *depth << std::endl;
+      std::cout << "height: " << *height << std::endl;
     }
   }
 }
