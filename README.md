@@ -245,9 +245,6 @@ source ./install/setup.bash
 # config中为示例使用的模型，根据实际安装路径进行拷贝
 cp -r install/lib/elevation_net/config/ .
 
-#设置运行环境变量
-export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:`pwd`/../sysroot_docker/usr/lib
-
 # 启动高程网络检测pkg
 ./install/lib/elevation_net/elevation_net
 
