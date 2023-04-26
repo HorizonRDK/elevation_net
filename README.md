@@ -218,7 +218,7 @@ source ./install/setup.bash
 cp -r install/lib/elevation_net/config/ .
 
 # 启动launch文件
-ros2 launch install/share/elevation_net/launch/hobot_elevation_net.launch.py
+ros2 launch install/share/elevation_net/launch/elevation_net.launch.py
 
 ```
 
