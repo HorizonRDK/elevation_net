@@ -1,5 +1,9 @@
 # Changelog for package elevation_net
 
+tros_2.0.0 (2023-05-11)
+------------------
+1. 更新package.xml，支持应用独立打包
+
 tros_1.1.6a (2023-02-16)
 ------------------
 1. 适配x86版本功能
