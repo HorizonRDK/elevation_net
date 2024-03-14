@@ -49,14 +49,8 @@ else()
   message("not using cv_bridge pkg")
 endif ()
 
-# BUILD_HBMEM is set in aarch64_toolchainfile.cmake
-if (${BUILD_HBMEM})
-  message("using shared mem")
-  find_package(hbm_img_msgs REQUIRED)
-  add_definitions(-DSHARED_MEM_ENABLED)
-else()
-  message("not using shared mem")
-endif ()
+find_package(hbm_img_msgs REQUIRED)
+add_definitions(-DSHARED_MEM_ENABLED)
 
 include_directories(include
   ${PROJECT_SOURCE_DIR}
@@ -109,15 +103,8 @@ ament_target_dependencies(
   dnn_node
   sensor_msgs
   ai_msgs
+  hbm_img_msgs
 )
-
-if (${BUILD_HBMEM})
-  ament_target_dependencies(
-    ${PROJECT_NAME}
-    hbm_img_msgs
-  )
-endif ()
-
 
 if (${CV_BRIDGE_PKG})
 ament_target_dependencies(
