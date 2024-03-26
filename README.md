@@ -16,7 +16,7 @@ The package externally publishes the 3D positioning information as a PointCloud2
 PointCloud2 is a built-in data structure in ROS, located in sensor_msg, where each point cloud in cloud contains x, y, z, and height, representing the three-dimensional coordinates and height information of the point cloud relative to the camera coordinate system.
 The description is as follows:
 
-````
+```
 header: // Header information of the point cloud
   seq: 963 //
   stamp: // Timestamp
@@ -50,12 +50,14 @@ fields: // sensor_msgs/PointField[] fields
     datatype: 7
     count: 1
 
-is_bigendian: False```cpp
+is_bigendian: False
 point_step: 16 // Length of a point in bytes
 row_step: 8294400 // Length of a row in bytes
 data: [ .......................................................... ] // Actual point data, size is (row_step*height)
 is_dense: True // No invalid points
-```Support compiling on X3 Ubuntu system and using docker cross-compilation on PC.
+```
+
+Support compiling on X3 Ubuntu system and using docker cross-compilation on PC.
 
 #### Compilation Options
 
@@ -150,7 +152,9 @@ cp -r install/lib/elevation_net/config/ .
 
 # Start the elevation_net package
 ros2 run elevation_net elevation_net --ros-args -p config_file_path:=./config -p feed_image:=./config/images/charging_base.png --ros-args --log-level info
-```### Running Method 2, Starting with Launch Files:
+```
+
+### Running Method 2, Starting with Launch Files:
 
 ```
 export COLCON_CURRENT_PREFIX=./install
@@ -201,7 +205,7 @@ cp -r install/lib/elevation_net/config/ .
 [16:15:18:976][WARN] [1655108119.406738772] [example]: This is dnn node example!
 [16:15:19:056][WARN] [1655108119.475098438] [elevation_dection]: Parameter:
 [16:15:19:056]config_file_path_:./config
-```[16:15:19:056] model_file_name_: ./config/elevation.hbm
+[16:15:19:056] model_file_name_: ./config/elevation.hbm
 [16:15:19:058]feed_image:./config/images/charging_base.png
 [16:15:19:058][INFO] [1655108119.475257138] [dnn]: Node init.
 [16:15:19:058][INFO] [1655108119.475309553] [elevation_dection]: Set node para.
@@ -266,5 +270,6 @@ cp -r install/lib/elevation_net/config/ .
 [16:15:19:417][INFO] [1655108119.810317745] [elevation_net_parser]: depth: 998.000000  
 [16:15:19:417][INFO] [1655108119.810364285] [elevation_net_parser]: height: -32.710201  
 [16:15:19:417][INFO] [1655108119.810410741] [elevation_net_parser]: depth: 998.000000  
+```
 
 # FAQ
